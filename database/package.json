@@ -13,11 +13,14 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^26.6.1",
+    "@types/pg": "^8.23.1",
     "@types/selenium-webdriver": "^4.35.7",
+    "node-pg-migrate": "^9.0.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {
     "dotenv": "^18.0.0",
+    "pg": "^8.23.0",
     "selenium-webdriver": "^4.49.0"
   }
 }

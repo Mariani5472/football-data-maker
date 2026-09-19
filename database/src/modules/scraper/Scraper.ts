@@ -32,7 +32,12 @@ export class Scraper {
 
   async completeScrap(leagueEssentials: LeagueUrlEssentials[]) {
     const leagues = await this.scrapLeagues(leagueEssentials);
-    const teamsEssentials = leagues.flatMap(l => l.teams);
+    const teamsEssentials = leagues
+      .flatMap((league) => league.teams)
+      .filter(
+        (team, index, array) =>
+          array.findIndex((item) => item.id === team.id) === index
+      );
 
     const teams = await this.scrapTeams(teamsEssentials);
     const managerEssentials = teams.flatMap(t => {
@@ -45,9 +50,12 @@ export class Scraper {
         countrySlug: t.venue.country.slug
       }
     })
-    const playerEssentials = teams.flatMap(t => t.players.flatMap(p => {
-      return { ...t.players }
-    }))
+    const playerEssentials = teams.flatMap((team) =>
+      team.players.map((player) => ({
+        id: player.id,
+        slug: player.slug
+      }))
+    );
 
     await this.scrapManagers(managerEssentials);
     await this.scrapVenues(venueEssentials);
