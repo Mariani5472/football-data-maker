@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx tsx src/index.ts",
+    "db:migrate": "node-pg-migrate up",
+    "db:rollback": "node-pg-migrate down"
   },
   "keywords": [],
   "author": "",

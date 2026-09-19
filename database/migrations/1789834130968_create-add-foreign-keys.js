@@ -86,12 +86,6 @@ export function up(pgm) {
       FOREIGN KEY (team_id)
       REFERENCES teams(id)
       ON DELETE CASCADE;
-
-      ALTER TABLE team_achievement_seasons
-ADD CONSTRAINT fk_team_achievement_seasons_team
-  FOREIGN KEY (team_id)
-  REFERENCES teams(id)
-  ON DELETE CASCADE;
   `);
 }
 
@@ -141,8 +135,5 @@ export function down(pgm) {
 
     ALTER TABLE team_achievement_seasons
     drop CONSTRAINT fk_team_achievement_seasons_team
-
-          ALTER TABLE team_achievement_seasons
-drop CONSTRAINT fk_team_achievement_seasons_team
   `);
 }
