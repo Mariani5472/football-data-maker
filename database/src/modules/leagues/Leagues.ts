@@ -20,6 +20,11 @@ export class Leagues {
   ): ApiRequest[] {
     return [
       {
+        name: "standings",
+        url: `https://www.sofascore.com/api/v1/unique-tournament/${league.id}/season/${season}/standings/total`,
+        paginated: false,
+      },
+      {
         name: "uniqueTournament",
         url: `https://www.sofascore.com/api/v1/unique-tournament/${league.id}`,
         paginated: false,
@@ -102,13 +107,7 @@ export class Leagues {
       await this.browser.get(mainPage);
       await sleep(3000);
 
-      const response = await getJson<StandingsResponse>(this.browser, mainPage);
-      const standing = response.standings?.[0];
-
-      if (!standing) {
-        throw new Error("standings[0] não encontrado na resposta.");
-      }
-
+      let standings: StandingsResponse | undefined;
       let uniqueTournament: UniqueTournamentResponse | undefined;
       let meta: MetaResponse | undefined;
       let info: SeasonInfoResponse | undefined;
@@ -116,6 +115,9 @@ export class Leagues {
 
       for (const api of apiUrls) {
         switch (api.name) {
+          case "standings":
+            standings = await getJson<StandingsResponse>(this.browser, api.url);
+            break;
           case "uniqueTournament":
             uniqueTournament = await getJson<UniqueTournamentResponse>(this.browser, api.url);
             break;
@@ -151,6 +153,10 @@ export class Leagues {
         }
       }
 
+      if (!standings) {
+        throw new Error(`standings não encontrado para ${essential.leagueSlug}.`);
+      }
+
       if (!uniqueTournament) {
         throw new Error(`uniqueTournament não encontrado para ${essential.leagueSlug}.`);
       }
@@ -162,8 +168,6 @@ export class Leagues {
       if (!info) {
         throw new Error(`info não encontrado para ${essential.leagueSlug}.`);
       }
-
-      const { rows } = standing;
 
       const tournament: League = {
         id: uniqueTournament.id,
@@ -203,10 +207,10 @@ export class Leagues {
 
         winners: winners?.winners ?? [],
 
-        teams: rows.map((row) => ({
+        teams: standings?.standings[0]?.rows.map((row) => ({
           id: row.team.id,
           slug: row.team.slug,
-        })),
+        })) ?? [],
       };
 
       leagues.push(tournament);

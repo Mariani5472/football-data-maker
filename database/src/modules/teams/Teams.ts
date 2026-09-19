@@ -20,6 +20,11 @@ export class Teams {
   ): ApiRequest[] {
     return [
       {
+        name: "uniqueTournament",
+        url: `https://www.sofascore.com/api/v1/team/${team.id}/unique-tournaments`,
+        paginated: false,
+      },
+      {
         name: "team",
         url: `https://www.sofascore.com/api/v1/team/${team.id}`,
         paginated: false,
@@ -118,7 +123,7 @@ export class Teams {
         achievements: {
           totalTrophies: achievements?.totalTrophies ?? 0,
 
-          competitions: achievements?.achievements.map((achievement) => ({
+          competitions: achievements?.achievements?.map((achievement) => ({
             uniqueTournament: achievement.uniqueTournament,
             trophiesWon: achievement.trophiesWon,
             seasons: achievement.seasons,

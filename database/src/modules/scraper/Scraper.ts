@@ -57,9 +57,13 @@ export class Scraper {
       }))
     );
 
-    await this.scrapManagers(managerEssentials);
-    await this.scrapVenues(venueEssentials);
-    await this.scrapPlayers(playerEssentials);
+    const managers = await this.scrapManagers(managerEssentials);
+    const venues = await this.scrapVenues(venueEssentials);
+    const players = await this.scrapPlayers(playerEssentials);
+
+    return {
+      leagues, teams, managers, venues, players
+    }
   }
 
   async scrapLeagues(leagueEssentials: LeagueUrlEssentials[]): Promise<League[]> {
