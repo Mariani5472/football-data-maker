@@ -136,6 +136,13 @@ export function down(pgm) {
     ALTER TABLE venue_teams
     DROP CONSTRAINT fk_venue_teams_team;
 
+    ALTER TABLE league_most_titles_teams
+    DROP CONSTRAINT fk_league_most_titles_teams_team
 
+    ALTER TABLE team_achievement_seasons
+    drop CONSTRAINT fk_team_achievement_seasons_team
+
+          ALTER TABLE team_achievement_seasons
+drop CONSTRAINT fk_team_achievement_seasons_team
   `);
 }
