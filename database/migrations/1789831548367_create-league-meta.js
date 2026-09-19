@@ -26,8 +26,6 @@ export const up = (pgm) => {
       competition_type VARCHAR(100),
       first_season_year VARCHAR(20),
 
-      promotedTeams: string[],
-
       has_playoff BOOLEAN NOT NULL
     );  
   `)
