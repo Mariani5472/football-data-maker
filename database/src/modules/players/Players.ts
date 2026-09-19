@@ -1,4 +1,5 @@
-import type { ApiRequest, Player, PlayerUrlEssentials } from "@/shared/index.ts";
+import type { OverviewsResponse, PlayerResponse, SummaryResponse } from "@/modules/players/types.ts";
+import { getJson, sleep, type ApiRequest, type Player, type PlayerUrlEssentials } from "@/shared/index.ts";
 import type { WebDriver } from "selenium-webdriver";
 
 export class Players {
@@ -49,6 +50,73 @@ export class Players {
       throw new Error("Nenhum jogador foi informado.");
     }
 
-    const teams: Player[] = [];
+    const players: Player[] = [];
+
+    for (const essential of playerUrlEssentials) {
+      const mainPage = this.getPlayerPageUrl(essential);
+      const apiUrls = this.getApiUrls(essential);
+
+      await this.browser.get(mainPage);
+      await sleep(1500);
+
+      let playerResponse: PlayerResponse | undefined;
+      let summaryResponse: SummaryResponse | undefined;
+      let overviewsResponse: OverviewsResponse | undefined;
+
+      for (const api of apiUrls) {
+        switch (api.name) {
+          case "player":
+            playerResponse = await getJson<PlayerResponse>(this.browser, api.url);
+            break;
+          case "summary":
+            summaryResponse = await getJson<SummaryResponse>(this.browser, api.url);
+            break;
+          case "overviews":
+            overviewsResponse = await getJson<OverviewsResponse>(this.browser, api.url);
+            break;
+        }
+      }
+
+      if (!playerResponse) {
+        throw new Error(`uniqueTournament não encontrado para ${essential.slug}.`);
+      }
+
+      const player: Player = {
+        id: playerResponse.id,
+
+        name: playerResponse.name,
+        slug: playerResponse.slug,
+        sofascoreId: playerResponse.sofascoreId,
+
+        country: playerResponse.country,
+        gender: playerResponse.gender,
+
+        dateOfBirthTimestamp: playerResponse.dateOfBirthTimestamp,
+        deceased: playerResponse.deceased,
+        underage: playerResponse.underage,
+
+        height: playerResponse.height,
+
+        jerseyNumber: playerResponse.jerseyNumber,
+        shirtNumber: playerResponse.shirtNumber,
+
+        position: playerResponse.position,
+        positionsDetailed: playerResponse.positionsDetailed,
+        preferredFoot: playerResponse.preferredFoot,
+
+        contractUntilTimestamp: playerResponse.contractUntilTimestamp,
+        proposedMarketValue: playerResponse.proposedMarketValue,
+        proposedMarketValueRaw: playerResponse.proposedMarketValueRaw,
+
+        team: playerResponse.team.id,
+
+        summary: summaryResponse?.summary ?? [],
+        attributeOverviews: overviewsResponse?.playerAttributeOverviews ?? [],
+      };
+
+      players.push(player);
+    }
+
+    return players;
   }
 }
