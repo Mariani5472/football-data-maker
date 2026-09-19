@@ -31,8 +31,7 @@ export const up = (pgm) => {
     shirt_number INTEGER,
 
     position VARCHAR(50),
-    positionsDetailed: string[],
-
+    positions_detailed TEXT[],
     preferred_foot VARCHAR(20),
 
     contract_until_timestamp BIGINT,

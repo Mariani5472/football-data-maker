@@ -74,6 +74,24 @@ export function up(pgm) {
       FOREIGN KEY (team_id)
       REFERENCES teams(id)
       ON DELETE CASCADE;
+
+      ALTER TABLE league_most_titles_teams
+    ADD CONSTRAINT fk_league_most_titles_teams_team
+      FOREIGN KEY (team_id)
+      REFERENCES teams(id)
+      ON DELETE CASCADE;
+
+    ALTER TABLE team_achievement_seasons
+    ADD CONSTRAINT fk_team_achievement_seasons_team
+      FOREIGN KEY (team_id)
+      REFERENCES teams(id)
+      ON DELETE CASCADE;
+
+      ALTER TABLE team_achievement_seasons
+ADD CONSTRAINT fk_team_achievement_seasons_team
+  FOREIGN KEY (team_id)
+  REFERENCES teams(id)
+  ON DELETE CASCADE;
   `);
 }
 
@@ -117,5 +135,7 @@ export function down(pgm) {
 
     ALTER TABLE venue_teams
     DROP CONSTRAINT fk_venue_teams_team;
+
+
   `);
 }

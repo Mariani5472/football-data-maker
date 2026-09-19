@@ -22,4 +22,4 @@ export const up = (pgm) => {
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
-export const down = (pgm) => { pgm.sql(`team_tournaments`) };
+export const down = (pgm) => { pgm.sql(`DROP TABLE team_tournaments`) };
