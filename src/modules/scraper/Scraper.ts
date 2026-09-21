@@ -28,11 +28,11 @@ export class Scraper {
     this.browser = browser;
     this.storage =
       optionalData?.storage ?? new JsonStorage(path.resolve(process.cwd(), "data"));
-    this.leagues = optionalData?.leagues ?? new Leagues(webDriver);
-    this.teams = optionalData?.teams ?? new Teams(webDriver);
-    this.managers = optionalData?.managers ?? new Managers(webDriver);
-    this.venues = optionalData?.venues ?? new Venues(webDriver);
-    this.players = optionalData?.players ?? new Players(webDriver);
+    this.leagues = optionalData?.leagues ?? new Leagues(webDriver, this.storage);
+    this.teams = optionalData?.teams ?? new Teams(webDriver, this.storage);
+    this.managers = optionalData?.managers ?? new Managers(webDriver, this.storage);
+    this.venues = optionalData?.venues ?? new Venues(webDriver, this.storage);
+    this.players = optionalData?.players ?? new Players(webDriver, this.storage);
   }
 
   async completeScrap(leagueEssentials: LeagueUrlEssentials[]) {

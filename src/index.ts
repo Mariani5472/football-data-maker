@@ -8,7 +8,8 @@ import path from 'node:path';
 
 async function main(): Promise<void> {
   const browser = new Browser();
-  browser.create(process.env.WEBSITE ?? 'MicrosoftEdge');
+  browser.create(process.env.BROWSER ?? 'MicrosoftEdge');
+  console.log(browser.get());
 
   const storage = new JsonStorage(path.resolve(process.cwd(), "data"));
   const scraper = new Scraper(browser, { storage });

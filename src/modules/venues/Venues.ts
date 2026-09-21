@@ -1,3 +1,4 @@
+import type { JsonStorage } from "@/modules/storage/JsonStorage.ts";
 import type { VenueResponse } from "@/modules/venues/index.ts";
 import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Venue, type VenueUrlEssentials } from "@/shared/index.ts";
@@ -6,11 +7,13 @@ import type { WebDriver } from "selenium-webdriver";
 
 export class Venues {
   private browser: WebDriver;
+  private storage: JsonStorage;
   private venues: Venue[] = [];
 
-  constructor(browser: WebDriver) {
+  constructor(browser: WebDriver, storage: JsonStorage) {
     this.browser = browser;
-  };
+    this.storage = storage;
+  }
 
   private getVenuePageUrl(venue: VenueUrlEssentials): string {
     return `https://www.sofascore.com/pt/football/venue/${venue.venueSlug}/${venue.id}`;
@@ -74,6 +77,7 @@ export class Venues {
       }
 
       venues.push(venue);
+      this.storage.save("venues", venue.id, venue);
     }
 
 

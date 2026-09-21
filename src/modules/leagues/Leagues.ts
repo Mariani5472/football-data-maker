@@ -3,14 +3,17 @@ import { getJson, sleep, type ApiRequest, type League, type LeagueUrlEssentials 
 import type { WebDriver } from "selenium-webdriver";
 import path from "node:path";
 import { downloadImage } from "@/shared/functions/downloadImage.ts";
+import type { JsonStorage } from "@/modules/storage/JsonStorage.ts";
 
 
 export class Leagues {
   private browser: WebDriver;
+  private storage: JsonStorage;
   private leagues: League[] = [];
 
-  constructor(browser: WebDriver) {
+  constructor(browser: WebDriver, storage: JsonStorage) {
     this.browser = browser;
+    this.storage = storage;
   };
 
   private getLeaguePageUrl(league: LeagueUrlEssentials): string {
@@ -221,6 +224,7 @@ export class Leagues {
       };
 
       leagues.push(tournament);
+      this.storage.save("leagues", tournament.id, tournament);
     }
 
     this.setLeagues(leagues)

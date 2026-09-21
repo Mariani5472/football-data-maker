@@ -1,4 +1,5 @@
 import type { CarrerResponse, ManagerResponse } from "@/modules/managers/types.ts";
+import type { JsonStorage } from "@/modules/storage/JsonStorage.ts";
 import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Manager, type ManagerUrlEssentials } from "@/shared/index.ts";
 import path from "node:path";
@@ -6,10 +7,12 @@ import { WebDriver } from "selenium-webdriver";
 
 export class Managers {
   private browser: WebDriver;
+  private storage: JsonStorage;
   private managers: Manager[] = [];
 
-  constructor(browser: WebDriver) {
+  constructor(browser: WebDriver, storage: JsonStorage) {
     this.browser = browser;
+    this.storage = storage;
   };
 
   private getManagerPageUrl(manager: ManagerUrlEssentials): string {
@@ -102,6 +105,7 @@ export class Managers {
       };
 
       managers.push(manager);
+      this.storage.save("managers", manager.id, manager);
     }
 
     return managers;

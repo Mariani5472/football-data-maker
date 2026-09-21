@@ -1,3 +1,4 @@
+import type { JsonStorage } from "@/modules/storage/JsonStorage.ts";
 import type { UniqueTournamentResponse } from "@/modules/teams/types.ts";
 import type { AchievementsResponse, PlayersResponse, TeamResponse } from "@/modules/teams/types.ts";
 import { downloadImage } from "@/shared/functions/downloadImage.ts";
@@ -7,11 +8,13 @@ import type { WebDriver } from "selenium-webdriver";
 
 export class Teams {
   private browser: WebDriver;
+  private storage: JsonStorage;
   private teams: Team[] = [];
 
-  constructor(browser: WebDriver) {
+  constructor(browser: WebDriver, storage: JsonStorage) {
     this.browser = browser;
-  };
+    this.storage = storage;
+  }
 
   private getTeamPageUrl(team: TeamUrlEssentials): string {
     return `https://www.sofascore.com/pt/football/team/${team.slug}/${team.id}`;
@@ -144,6 +147,7 @@ export class Teams {
       };
 
       teams.push(team);
+      this.storage.save("teams", team.id, team);
     }
 
     return teams;

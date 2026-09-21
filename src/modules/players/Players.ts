@@ -7,11 +7,13 @@ import type { WebDriver } from "selenium-webdriver";
 
 export class Players {
   private browser: WebDriver;
+  private storage: JsonStorage;
   private players: Player[] = [];
 
-  constructor(browser: WebDriver) {
+  constructor(browser: WebDriver, storage: JsonStorage) {
     this.browser = browser;
-  };
+    this.storage = storage;
+  }
 
   private getPlayerPageUrl(player: PlayerUrlEssentials): string {
     return `https://www.sofascore.com/pt/football/player/${player.slug}/${player.id}`;
@@ -143,6 +145,7 @@ export class Players {
       };
 
       players.push(player);
+      this.storage.save("players", player.id, player);
     }
 
     return players;
