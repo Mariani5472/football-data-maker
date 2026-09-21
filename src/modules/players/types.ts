@@ -61,3 +61,60 @@ export type OverviewsResponse = {
     yearShift: number;
   }[]
 }
+
+export type StatisticsResponse = {
+  seasons: {
+    startYear: number
+    endYear: number
+    statistics: {
+      accurateCrosses: number;
+      accurateCrossesPercentage: number;
+      accuratePasses: number;
+      accuratePassesPercentage: number;
+      assists: number;
+      bigChancesCreated: number;
+      bigChancesMissed: number;
+      cleanSheet: number;
+      dribbledPast: number;
+      errorLeadToGoal: number;
+      goals: number;
+      goalsAssistsSum: number;
+      goalsConceded: number;
+      interceptions: number;
+      keyPasses: number;
+      minutesPlayed: number;
+      passToAssist: number;
+      rating: number;
+      redCards: number;
+      saves: number;
+      successfulDribbles: number;
+      tackles: number;
+      yellowCards: number;
+      totalRating: number;
+      countRating: number;
+      totalCross: number;
+      totalPasses: number;
+      shotsFromInsideTheBox: number;
+      accurateOwnHalfPasses: number;
+      accurateOppositionHalfPasses: number;
+      accurateFinalThirdPasses: number;
+      touches: number;
+      touchesInOppBox: number;
+      unsuccessfulTouches: number;
+      successfulDribblesPercentage: number;
+      ballRecovery: number;
+      defensiveContributions: number;
+      totalDuelsWon: number;
+      totalDuelsWonPercentage: number;
+      groundDuelsWon: number;
+      groundDuelsWonPercentage: number;
+      aerialDuelsWonPercentage: number;
+      wasFouled: number;
+      fouls: number;
+      offsides: number;
+      appearances: number;
+      goalInvolvements: number;
+      type: string,
+    }
+  }[]
+}

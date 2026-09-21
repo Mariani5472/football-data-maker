@@ -1,4 +1,5 @@
-import type { OverviewsResponse, PlayerResponse, SummaryResponse } from "@/modules/players/types.ts";
+import type { OverviewsResponse, PlayerResponse, StatisticsResponse, SummaryResponse } from "@/modules/players/types.ts";
+import { JsonStorage } from "@/modules/storage/JsonStorage.ts";
 import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Player, type PlayerUrlEssentials } from "@/shared/index.ts";
 import path from "node:path";
@@ -35,6 +36,11 @@ export class Players {
         url: `https://www.sofascore.com/api/v1/player/${player.id}/attribute-overviews`,
         paginated: false,
       },
+      {
+        name: "statistics",
+        url: `https://www.sofascore.com/api/v1/player/${player.id}/statistics`,
+        paginated: false,
+      },
     ];
   }
 
@@ -64,6 +70,7 @@ export class Players {
       let playerResponse: PlayerResponse | undefined;
       let summaryResponse: SummaryResponse | undefined;
       let overviewsResponse: OverviewsResponse | undefined;
+      let statisticsResponse: StatisticsResponse | undefined;
 
       for (const api of apiUrls) {
         switch (api.name) {
@@ -76,11 +83,24 @@ export class Players {
           case "overviews":
             overviewsResponse = await getJson<OverviewsResponse>(this.browser, api.url);
             break;
+          case "statistics":
+            statisticsResponse = await getJson<StatisticsResponse>(this.browser, api.url);
+            break;
         }
       }
 
       if (!playerResponse) {
         throw new Error(`uniqueTournament não encontrado para ${essential.slug}.`);
+      }
+
+      let statistics: StatisticsResponse["seasons"][number]["statistics"][] | undefined;
+
+      if (statisticsResponse && statisticsResponse.seasons.length) {
+        const thisYear = new Date().getFullYear();
+        const currentSeason = statisticsResponse.seasons.filter(s => s.endYear === thisYear);
+        statistics = currentSeason.map(s => {
+          return ({ ...s.statistics });
+        })
       }
 
       const imageUrl = `https://img.sofascore.com/api/v1/player/${essential.id}/image`;
@@ -119,6 +139,7 @@ export class Players {
 
         summary: summaryResponse?.summary ?? [],
         attributeOverviews: overviewsResponse?.playerAttributeOverviews ?? [],
+        statistics: statistics ?? []
       };
 
       players.push(player);

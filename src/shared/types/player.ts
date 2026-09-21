@@ -1,4 +1,5 @@
 import type { EntityId } from "@/modules/leagues/types.ts";
+import type { StatisticsResponse } from "@/modules/players/types.ts";
 import type { Country } from "@/shared/types/country.ts";
 
 export type Player = {
@@ -51,6 +52,8 @@ export type Player = {
     technical: number;
     yearShift: number;
   }[];
+
+  statistics?: StatisticsResponse["seasons"][number]["statistics"][]
 };
 
 export type PlayerUrlEssentials = Pick<Player, "id" | "slug">;

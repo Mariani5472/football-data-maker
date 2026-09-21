@@ -3,13 +3,16 @@ import { Leagues } from "@/modules/leagues/Leagues.ts";
 import { Managers } from "@/modules/managers/Managers.ts";
 import { Players } from "@/modules/players/Players.ts";
 import type { OptionalData } from "@/modules/scraper/types.ts";
+import { JsonStorage } from "@/modules/storage/JsonStorage.ts";
 import { Teams } from "@/modules/teams/Teams.ts";
 import { Venues } from "@/modules/venues/Venues.ts";
 import type { League, LeagueUrlEssentials, ManagerUrlEssentials, PlayerUrlEssentials, VenueUrlEssentials } from "@/shared/index.ts";
 import type { TeamUrlEssentials } from "@/shared/types/team.ts";
+import path from "node:path";
 
 export class Scraper {
   private browser: Browser;
+  private storage: JsonStorage;
   private leagues: Leagues;
   private teams: Teams;
   private managers: Managers;
@@ -23,6 +26,8 @@ export class Scraper {
     }
 
     this.browser = browser;
+    this.storage =
+      optionalData?.storage ?? new JsonStorage(path.resolve(process.cwd(), "data"));
     this.leagues = optionalData?.leagues ?? new Leagues(webDriver);
     this.teams = optionalData?.teams ?? new Teams(webDriver);
     this.managers = optionalData?.managers ?? new Managers(webDriver);
