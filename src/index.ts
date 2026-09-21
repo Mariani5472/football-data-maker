@@ -12,7 +12,7 @@ async function main(): Promise<void> {
   console.log(browser.get(), process.env.BROWSER);
 
   const storage = new JsonStorage(path.resolve(process.cwd(), "data"));
-  storage.setRewrite(true);
+  storage.setRewrite(process.env.REWRITE?.toLocaleLowerCase() === "true");
 
   const scraper = new Scraper(browser, { storage });
   scraper.completeScrap(desiredLeagues);
