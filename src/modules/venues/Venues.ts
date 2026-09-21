@@ -16,7 +16,7 @@ export class Venues {
   }
 
   private getVenuePageUrl(venue: VenueUrlEssentials): string {
-    return `https://www.sofascore.com/pt/football/venue/${venue.venueSlug}/${venue.id}`;
+    return `https://www.sofascore.com/pt/football/venue/${venue.countrySlug}/${venue.venueSlug}/${venue.id}`;
   }
 
   private getApiUrls(
