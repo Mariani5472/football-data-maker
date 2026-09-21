@@ -64,9 +64,11 @@ export class Players {
 
     for (const essential of playerUrlEssentials) {
       const rewrite = this.storage.getRewrite();
-      if (!rewrite) {
-        const exists = await this.storage.exists("players", essential.id);
-        if (exists) continue;
+      const exists = await this.storage.exists("players", essential.id);
+
+      if (exists && !rewrite) {
+        const league = await this.storage.load<Player>("players", essential.id);
+        players.push(league);
       }
 
       const mainPage = this.getPlayerPageUrl(essential);
@@ -103,7 +105,10 @@ export class Players {
 
       let statistics: StatisticsResponse["seasons"][number]["statistics"][] | undefined;
 
-      if (statisticsResponse && statisticsResponse.seasons.length) {
+      if (statisticsResponse &&
+        statisticsResponse.seasons &&
+        statisticsResponse.seasons.length
+      ) {
         const thisYear = new Date().getFullYear();
         const currentSeason = statisticsResponse.seasons.filter(s => s.endYear === thisYear);
         statistics = currentSeason.map(s => {

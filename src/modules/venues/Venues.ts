@@ -48,9 +48,11 @@ export class Venues {
 
     for (const essential of venueUrlEssentials) {
       const rewrite = this.storage.getRewrite();
-      if (!rewrite) {
-        const exists = await this.storage.exists("venues", essential.id);
-        if (exists) continue;
+      const exists = await this.storage.exists("venues", essential.id);
+
+      if (exists && !rewrite) {
+        const venue = await this.storage.load<Venue>("venues", essential.id);
+        venues.push(venue);
       }
 
       const mainPage = this.getVenuePageUrl(essential);
