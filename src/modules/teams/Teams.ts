@@ -63,6 +63,12 @@ export class Teams {
     const teams: Team[] = [];
 
     for (const essential of teamUrlEssentials) {
+      const rewrite = this.storage.getRewrite();
+      if (!rewrite) {
+        const exists = await this.storage.exists("teams", essential.id);
+        if (exists) continue;
+      }
+
       const mainPage = this.getTeamPageUrl(essential);
       const apiUrls = this.getApiUrls(essential);
 

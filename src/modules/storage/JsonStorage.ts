@@ -7,7 +7,19 @@ import {
 import path from "node:path";
 
 export class JsonStorage {
-  constructor(private readonly basePath: string) {}
+  private rewrite: boolean = true;
+
+  constructor(
+    private readonly basePath: string
+  ) {}
+
+  getRewrite(): boolean {
+    return this.rewrite;
+  }
+
+  setRewrite(state: boolean): void {
+    this.rewrite = state;
+  }
 
   private getPath(collection: string, id: number | string): string {
     return path.join(this.basePath, collection, `${id}.json`);
@@ -29,8 +41,15 @@ export class JsonStorage {
     collection: string,
     id: number | string,
     data: T,
-  ): Promise<void> {
+  ): Promise<boolean> {
     const filePath = this.getPath(collection, id);
+
+    if (!this.rewrite) {
+      const alreadyExists = await this.exists(collection, id,);
+      if (alreadyExists) {
+        return false;
+      }
+    }
 
     await mkdir(path.dirname(filePath), {
       recursive: true,
@@ -41,6 +60,8 @@ export class JsonStorage {
       JSON.stringify(data, null, 2),
       "utf8",
     );
+
+    return true;
   }
 
   async load<T>(

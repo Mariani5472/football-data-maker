@@ -47,6 +47,12 @@ export class Venues {
     const venues: Venue[] = [];
 
     for (const essential of venueUrlEssentials) {
+      const rewrite = this.storage.getRewrite();
+      if (!rewrite) {
+        const exists = await this.storage.exists("venues", essential.id);
+        if (exists) continue;
+      }
+
       const mainPage = this.getVenuePageUrl(essential);
       const apiUrls = this.getApiUrls(essential);
 

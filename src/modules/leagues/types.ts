@@ -29,33 +29,35 @@ export interface StandingsResponse {
 }
 
 export type UniqueTournamentResponse = {
-  name: string;
-  slug: string;
+  uniqueTournament: {
+    name: string;
+    slug: string;
 
-  primaryColorHex: string;
-  secondaryColorHex: string;
+    primaryColorHex: string;
+    secondaryColorHex: string;
 
-  country: Country;
+    country: Country;
 
-  tier: number;
+    tier: number;
 
-  titleHolder: EntityId;
+    titleHolder: EntityId;
 
-  hasRounds: boolean;
-  hasGroups: boolean;
-  hasPlayoffSeries: boolean;
+    hasRounds: boolean;
+    hasGroups: boolean;
+    hasPlayoffSeries: boolean;
 
-  upperDivisions: EntityId[];
-  lowerDivisions: EntityId[];
+    upperDivisions: EntityId[];
+    lowerDivisions: EntityId[];
 
-  gender: "M" | "F";
+    gender: "M" | "F";
 
-  id: number;
+    id: number;
 
-  startDateTimestamp: number;
-  endDateTimestamp: number;
+    startDateTimestamp: number;
+    endDateTimestamp: number;
 
-  mostTitlesTeams: EntityId[];
+    mostTitlesTeams: EntityId[];
+  }
 };
 
 export type MetaResponse = {

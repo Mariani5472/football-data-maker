@@ -8,7 +8,8 @@ export async function downloadImage(
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`Erro ao baixar imagem: ${response.status} ${response.statusText}`);
+    console.log(`${url} sem imagem.`)
+    return;
   }
 
   const buffer = Buffer.from(await response.arrayBuffer());

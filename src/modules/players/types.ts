@@ -17,28 +17,30 @@ export type ApiRequest<K extends keyof ApiRequestMap> = {
 };
 
 export type PlayerResponse = {
-  contractUntilTimestamp: number;
-  country: Country;
-  dateOfBirthTimestamp: number;
-  deceased: boolean;
-  gender: "M" | "F";
-  height: number;
-  id: number;
-  jerseyNumber: string;
-  shirtNumber: number;
-  name: string
-  position: string;
-  positionsDetailed: string[];
-  preferredFoot: string;
-  proposedMarketValue: number;
-  proposedMarketValueRaw: {
-    currency: string;
-    value: number;
-  },
-  slug: string;
-  sofascoreId: string;
-  underage: boolean
-  team: { id: EntityId }
+  player: {
+    contractUntilTimestamp: number;
+    country: Country;
+    dateOfBirthTimestamp: number;
+    deceased: boolean;
+    gender: "M" | "F";
+    height: number;
+    id: number;
+    jerseyNumber: string;
+    shirtNumber: number;
+    name: string
+    position: string;
+    positionsDetailed: string[];
+    preferredFoot: string;
+    proposedMarketValue: number;
+    proposedMarketValueRaw: {
+      currency: string;
+      value: number;
+    },
+    slug: string;
+    sofascoreId: string;
+    underage: boolean
+    team: { id: EntityId }
+  }
 };
 
 export type SummaryResponse = {

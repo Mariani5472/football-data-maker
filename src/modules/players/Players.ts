@@ -63,6 +63,12 @@ export class Players {
     const players: Player[] = [];
 
     for (const essential of playerUrlEssentials) {
+      const rewrite = this.storage.getRewrite();
+      if (!rewrite) {
+        const exists = await this.storage.exists("players", essential.id);
+        if (exists) continue;
+      }
+
       const mainPage = this.getPlayerPageUrl(essential);
       const apiUrls = this.getApiUrls(essential);
 
@@ -110,34 +116,34 @@ export class Players {
       await downloadImage(imageUrl, imagePath);
 
       const player: Player = {
-        id: playerResponse.id,
+        id: playerResponse.player.id,
 
-        name: playerResponse.name,
-        slug: playerResponse.slug,
-        sofascoreId: playerResponse.sofascoreId,
+        name: playerResponse.player.name,
+        slug: playerResponse.player.slug,
+        sofascoreId: playerResponse.player.sofascoreId,
         image: `${essential.id}.png`,
 
-        country: playerResponse.country,
-        gender: playerResponse.gender,
+        country: playerResponse.player.country,
+        gender: playerResponse.player.gender,
 
-        dateOfBirthTimestamp: playerResponse.dateOfBirthTimestamp,
-        deceased: playerResponse.deceased,
-        underage: playerResponse.underage,
+        dateOfBirthTimestamp: playerResponse.player.dateOfBirthTimestamp,
+        deceased: playerResponse.player.deceased,
+        underage: playerResponse.player.underage,
 
-        height: playerResponse.height,
+        height: playerResponse.player.height,
 
-        jerseyNumber: playerResponse.jerseyNumber,
-        shirtNumber: playerResponse.shirtNumber,
+        jerseyNumber: playerResponse.player.jerseyNumber,
+        shirtNumber: playerResponse.player.shirtNumber,
 
-        position: playerResponse.position,
-        positionsDetailed: playerResponse.positionsDetailed,
-        preferredFoot: playerResponse.preferredFoot,
+        position: playerResponse.player.position,
+        positionsDetailed: playerResponse.player.positionsDetailed,
+        preferredFoot: playerResponse.player.preferredFoot,
 
-        contractUntilTimestamp: playerResponse.contractUntilTimestamp,
-        proposedMarketValue: playerResponse.proposedMarketValue,
-        proposedMarketValueRaw: playerResponse.proposedMarketValueRaw,
+        contractUntilTimestamp: playerResponse.player.contractUntilTimestamp,
+        proposedMarketValue: playerResponse.player.proposedMarketValue,
+        proposedMarketValueRaw: playerResponse.player.proposedMarketValueRaw,
 
-        team: playerResponse.team.id,
+        team: playerResponse.player.team.id,
 
         summary: summaryResponse?.summary ?? [],
         attributeOverviews: overviewsResponse?.playerAttributeOverviews ?? [],

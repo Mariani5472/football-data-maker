@@ -25,12 +25,12 @@ export class Managers {
     return [
       {
         name: "manager",
-        url: `https://www.sofascore.com/api/v1/manager/${manager}`,
+        url: `https://www.sofascore.com/api/v1/manager/${manager.id}`,
         paginated: false,
       },
       {
         name: "carrer",
-        url: `https://www.sofascore.com/api/v1/manager/${manager}/career-history`,
+        url: `https://www.sofascore.com/api/v1/manager/${manager.id}/career-history`,
         paginated: false,
       },
     ]
@@ -52,6 +52,12 @@ export class Managers {
     const managers: Manager[] = [];
 
     for (const essential of managerUrlEssentials) {
+      const rewrite = this.storage.getRewrite();
+      if (!rewrite) {
+        const exists = await this.storage.exists("managers", essential.id);
+        if (exists) continue;
+      }
+
       const mainPage = this.getManagerPageUrl(essential);
       const apiUrls = this.getApiUrls(essential)
 
@@ -81,25 +87,25 @@ export class Managers {
       await downloadImage(imageUrl, imagePath);
 
       const manager: Manager = {
-        id: managerResponse.id,
+        id: managerResponse.manager.id,
 
-        name: managerResponse.name,
-        shortName: managerResponse.shortName,
-        slug: managerResponse.slug,
+        name: managerResponse.manager.name,
+        shortName: managerResponse.manager.shortName,
+        slug: managerResponse.manager.slug,
         image: `${essential.id}.png`,
 
-        country: managerResponse.country,
-        nationality: managerResponse.nationality,
-        nationalityISO2: managerResponse.nationalityISO2,
+        country: managerResponse.manager.country,
+        nationality: managerResponse.manager.nationality,
+        nationalityISO2: managerResponse.manager.nationalityISO2,
 
-        dateOfBirthTimestamp: managerResponse.dateOfBirthTimestamp,
-        deceased: managerResponse.deceased,
+        dateOfBirthTimestamp: managerResponse.manager.dateOfBirthTimestamp,
+        deceased: managerResponse.manager.deceased,
 
-        preferredFormation: managerResponse.preferredFormation,
+        preferredFormation: managerResponse.manager.preferredFormation,
 
-        team: managerResponse.team,
+        team: managerResponse.manager.team,
 
-        performance: managerResponse.performance,
+        performance: managerResponse.manager.performance,
 
         career: history?.careerHistory ?? [],
       };

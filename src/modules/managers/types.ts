@@ -16,25 +16,27 @@ export type ApiRequest<K extends keyof ApiRequestMap> = {
 };
 
 export type ManagerResponse = {
-  country: Country;
-  dateOfBirthTimestamp: number;
-  deceased: boolean;
-  id: number;
-  name: string;
-  nationality: string;
-  nationalityISO2: string;
-  preferredFormation: string;
-  shortName: string;
-  slug: string;
-  team: EntityId
-  performance: {
-    total: number,
-    wins: number,
-    draws: number,
-    losses: number,
-    goalsScored: number,
-    goalsConceded: number,
-    totalPoints: number
+  manager: {
+    country: Country;
+    dateOfBirthTimestamp: number;
+    deceased: boolean;
+    id: number;
+    name: string;
+    nationality: string;
+    nationalityISO2: string;
+    preferredFormation: string;
+    shortName: string;
+    slug: string;
+    team: EntityId
+    performance: {
+      total: number,
+      wins: number,
+      draws: number,
+      losses: number,
+      goalsScored: number,
+      goalsConceded: number,
+      totalPoints: number
+    }
   }
 }
 

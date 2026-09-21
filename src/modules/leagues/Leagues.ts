@@ -105,6 +105,12 @@ export class Leagues {
     const leagues: League[] = [];
 
     for (const essential of leagueUrlEssentials) {
+      const rewrite = this.storage.getRewrite();
+      if (!rewrite) {
+        const exists = await this.storage.exists("leagues", essential.id);
+        if (exists) continue;
+      }
+
       const season = await this.getCurrentSeasonId(essential);
 
       const mainPage = this.getLeaguePageUrl(essential);
@@ -180,26 +186,26 @@ export class Leagues {
       await downloadImage(imageUrl, imagePath);
 
       const tournament: League = {
-        id: uniqueTournament.id,
-        name: uniqueTournament.name,
-        slug: uniqueTournament.slug,
+        id: uniqueTournament.uniqueTournament.id,
+        name: uniqueTournament.uniqueTournament.name,
+        slug: uniqueTournament.uniqueTournament.slug,
 
-        country: uniqueTournament.country,
-        gender: uniqueTournament.gender,
-        tier: uniqueTournament.tier,
+        country: uniqueTournament.uniqueTournament.country,
+        gender: uniqueTournament.uniqueTournament.gender,
+        tier: uniqueTournament.uniqueTournament.tier,
 
-        primaryColorHex: uniqueTournament.primaryColorHex,
-        secondaryColorHex: uniqueTournament.secondaryColorHex,
+        primaryColorHex: uniqueTournament.uniqueTournament.primaryColorHex,
+        secondaryColorHex: uniqueTournament.uniqueTournament.secondaryColorHex,
         image: `${essential.id}.png`,
 
-        isGroup: uniqueTournament.hasGroups,
-        hasRounds: uniqueTournament.hasRounds,
-        hasGroups: uniqueTournament.hasGroups,
-        hasPlayoffSeries: uniqueTournament.hasPlayoffSeries,
+        isGroup: uniqueTournament.uniqueTournament.hasGroups,
+        hasRounds: uniqueTournament.uniqueTournament.hasRounds,
+        hasGroups: uniqueTournament.uniqueTournament.hasGroups,
+        hasPlayoffSeries: uniqueTournament.uniqueTournament.hasPlayoffSeries,
         hasPlayoff: meta.meta.hasPlayoff,
 
-        startDateTimestamp: uniqueTournament.startDateTimestamp,
-        endDateTimestamp: uniqueTournament.endDateTimestamp,
+        startDateTimestamp: uniqueTournament.uniqueTournament.startDateTimestamp,
+        endDateTimestamp: uniqueTournament.uniqueTournament.endDateTimestamp,
 
         currentSeason: {
           id: info.info.id,
@@ -212,8 +218,8 @@ export class Leagues {
 
         meta: meta.meta,
 
-        titleHolder: uniqueTournament.titleHolder,
-        mostTitlesTeams: uniqueTournament.mostTitlesTeams,
+        titleHolder: uniqueTournament.uniqueTournament.titleHolder,
+        mostTitlesTeams: uniqueTournament.uniqueTournament.mostTitlesTeams,
 
         winners: winners?.winners ?? [],
 
