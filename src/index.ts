@@ -9,7 +9,6 @@ import path from 'node:path';
 async function main(): Promise<void> {
   const browser = new Browser();
   await browser.create(process.env.BROWSER ?? 'MicrosoftEdge');
-  console.log(browser.get(), process.env.BROWSER);
 
   const storage = new JsonStorage(path.resolve(process.cwd(), "data"));
   storage.setRewrite(process.env.REWRITE?.toLocaleLowerCase() === "true");

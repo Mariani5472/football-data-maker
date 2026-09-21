@@ -58,6 +58,7 @@ export class Managers {
       if (exists && !rewrite) {
         const manager = await this.storage.load<Manager>("managers", essential.id);
         managers.push(manager);
+        continue;
       }
 
       const mainPage = this.getManagerPageUrl(essential);

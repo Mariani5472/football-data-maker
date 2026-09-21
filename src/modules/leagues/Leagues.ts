@@ -111,6 +111,7 @@ export class Leagues {
       if (exists && !rewrite) {
         const league = await this.storage.load<League>("leagues", essential.id);
         leagues.push(league);
+        continue;
       }
 
       const season = await this.getCurrentSeasonId(essential);

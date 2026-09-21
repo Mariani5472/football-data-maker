@@ -69,6 +69,7 @@ export class Teams {
       if (exists && !rewrite) {
         const team = await this.storage.load<Team>("teams", essential.id);
         teams.push(team);
+        continue;
       }
 
       const mainPage = this.getTeamPageUrl(essential);

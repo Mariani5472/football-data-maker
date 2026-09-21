@@ -69,6 +69,7 @@ export class Players {
       if (exists && !rewrite) {
         const league = await this.storage.load<Player>("players", essential.id);
         players.push(league);
+        continue;
       }
 
       const mainPage = this.getPlayerPageUrl(essential);
