@@ -1,5 +1,7 @@
 import type { CarrerResponse, ManagerResponse } from "@/modules/managers/types.ts";
+import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Manager, type ManagerUrlEssentials } from "@/shared/index.ts";
+import path from "node:path";
 import { WebDriver } from "selenium-webdriver";
 
 export class Managers {
@@ -71,13 +73,17 @@ export class Managers {
         throw new Error(`manager não encontrado para ${essential.slug}.`);
       }
 
+      const imageUrl = `https://img.sofascore.com/api/v1/manager/${essential.id}/image`;
+      const imagePath = path.resolve(process.cwd(), "assets", "managers", `${essential.id}.png`,);
+      await downloadImage(imageUrl, imagePath);
+
       const manager: Manager = {
         id: managerResponse.id,
 
         name: managerResponse.name,
         shortName: managerResponse.shortName,
         slug: managerResponse.slug,
-        image: `https://www.sofascore.com/api/v1/manager/${essential.id}/image`,
+        image: `${essential.id}.png`,
 
         country: managerResponse.country,
         nationality: managerResponse.nationality,

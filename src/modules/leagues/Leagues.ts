@@ -1,6 +1,9 @@
 import type { MetaResponse, SeasonInfoResponse, StandingsResponse, UniqueTournamentResponse, WinnersResponse } from "@/modules/leagues/types.ts";
 import { getJson, sleep, type ApiRequest, type League, type LeagueUrlEssentials } from "@/shared/index.ts";
 import type { WebDriver } from "selenium-webdriver";
+import path from "node:path";
+import { downloadImage } from "@/shared/functions/downloadImage.ts";
+
 
 export class Leagues {
   private browser: WebDriver;
@@ -169,6 +172,10 @@ export class Leagues {
         throw new Error(`info não encontrado para ${essential.leagueSlug}.`);
       }
 
+      const imageUrl = `https://img.sofascore.com/api/v1/unique-tournament/${essential.id}/image`;
+      const imagePath = path.resolve(process.cwd(), "assets", "leagues", `${essential.id}.png`,);
+      await downloadImage(imageUrl, imagePath);
+
       const tournament: League = {
         id: uniqueTournament.id,
         name: uniqueTournament.name,
@@ -180,7 +187,7 @@ export class Leagues {
 
         primaryColorHex: uniqueTournament.primaryColorHex,
         secondaryColorHex: uniqueTournament.secondaryColorHex,
-        image: `https://img.sofascore.com/api/v1/unique-tournament/${essential.id}/image`,
+        image: `${essential.id}.png`,
 
         isGroup: uniqueTournament.hasGroups,
         hasRounds: uniqueTournament.hasRounds,

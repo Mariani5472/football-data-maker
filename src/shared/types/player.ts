@@ -7,6 +7,7 @@ export type Player = {
   name: string;
   slug: string;
   sofascoreId: string;
+  image: string;
 
   country: Country;
   gender: "M" | "F";

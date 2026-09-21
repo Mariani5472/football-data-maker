@@ -1,5 +1,7 @@
 import type { OverviewsResponse, PlayerResponse, SummaryResponse } from "@/modules/players/types.ts";
+import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Player, type PlayerUrlEssentials } from "@/shared/index.ts";
+import path from "node:path";
 import type { WebDriver } from "selenium-webdriver";
 
 export class Players {
@@ -81,12 +83,17 @@ export class Players {
         throw new Error(`uniqueTournament não encontrado para ${essential.slug}.`);
       }
 
+      const imageUrl = `https://img.sofascore.com/api/v1/player/${essential.id}/image`;
+      const imagePath = path.resolve(process.cwd(), "assets", "players", `${essential.id}.png`,);
+      await downloadImage(imageUrl, imagePath);
+
       const player: Player = {
         id: playerResponse.id,
 
         name: playerResponse.name,
         slug: playerResponse.slug,
         sofascoreId: playerResponse.sofascoreId,
+        image: `${essential.id}.png`,
 
         country: playerResponse.country,
         gender: playerResponse.gender,

@@ -1,5 +1,7 @@
 import type { VenueResponse } from "@/modules/venues/index.ts";
+import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Venue, type VenueUrlEssentials } from "@/shared/index.ts";
+import path from "node:path";
 import type { WebDriver } from "selenium-webdriver";
 
 export class Venues {
@@ -62,9 +64,13 @@ export class Venues {
         throw new Error(`venueResponse não encontrado para ${essential.venueSlug}.`);
       }
 
+      const imageUrl = `https://img.sofascore.com/api/v1/venue/${essential.id}/image`;
+      const imagePath = path.resolve(process.cwd(), "assets", "venues", `${essential.id}.png`,);
+      await downloadImage(imageUrl, imagePath);
+
       const venue: Venue = {
         ...venueResponse.venue,
-        image: `https://www.sofascore.com/api/v1/venue/${essential.id}/image`
+        image: `${essential.id}.png`
       }
 
       venues.push(venue);

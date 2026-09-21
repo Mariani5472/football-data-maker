@@ -1,6 +1,8 @@
 import type { UniqueTournamentResponse } from "@/modules/teams/types.ts";
 import type { AchievementsResponse, PlayersResponse, TeamResponse } from "@/modules/teams/types.ts";
+import { downloadImage } from "@/shared/functions/downloadImage.ts";
 import { getJson, sleep, type ApiRequest, type Team, type TeamUrlEssentials } from "@/shared/index.ts";
+import path from "node:path";
 import type { WebDriver } from "selenium-webdriver";
 
 export class Teams {
@@ -98,6 +100,10 @@ export class Teams {
         throw new Error(`teamResponse não encontrado para ${essential.slug}.`);
       }
 
+      const imageUrl = `https://img.sofascore.com/api/v1/team/${essential.id}/image`;
+      const imagePath = path.resolve(process.cwd(), "assets", "teams", `${essential.id}.png`,);
+      await downloadImage(imageUrl, imagePath);
+
       const team: Team = {
         id: teamResponse.team.id,
 
@@ -111,7 +117,7 @@ export class Teams {
         country: teamResponse.team.country,
 
         teamColors: teamResponse.team.teamColors,
-        image: `https://img.sofascore.com/api/v1/team/${essential.id}/image`,
+        image: `${essential.id}.png`,
 
         foundationDateTimestamp:
           teamResponse.team.foundationDateTimestamp,
