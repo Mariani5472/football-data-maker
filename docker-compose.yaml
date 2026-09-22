@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: football_db
+      MYSQL_DATABASE: football_data
       MYSQL_USER: football
       MYSQL_PASSWORD: football
     ports:
