@@ -14,7 +14,8 @@ async function main(): Promise<void> {
   storage.setRewrite(process.env.REWRITE?.toLocaleLowerCase() === "true");
 
   const scraper = new Scraper(browser, { storage });
-  scraper.completeScrap(desiredLeagues);
+  await scraper.completeScrap(desiredLeagues);
+  await browser.quit();
 }
 
 main()

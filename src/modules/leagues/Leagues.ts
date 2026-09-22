@@ -105,6 +105,7 @@ export class Leagues {
     const leagues: League[] = [];
 
     for (const essential of leagueUrlEssentials) {
+      if (!essential.id) continue;
       const rewrite = this.storage.getRewrite();
       const exists = await this.storage.exists("leagues", essential.id);
 

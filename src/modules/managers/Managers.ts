@@ -45,6 +45,7 @@ export class Managers {
   }
 
   async scrap(managerUrlEssentials: ManagerUrlEssentials[]): Promise<Manager[]> {
+    console.log(managerUrlEssentials)
     if (!managerUrlEssentials.length) {
       throw new Error("Nenhum tecnico foi informado.");
     }
@@ -52,6 +53,7 @@ export class Managers {
     const managers: Manager[] = [];
 
     for (const essential of managerUrlEssentials) {
+      if (!essential.id) continue;
       const rewrite = this.storage.getRewrite();
       const exists = await this.storage.exists("managers", essential.id);
 

@@ -16,7 +16,7 @@ export class Venues {
   }
 
   private getVenuePageUrl(venue: VenueUrlEssentials): string {
-    return `https://www.sofascore.com/pt/football/venue/${venue.countrySlug}/${venue.venueSlug}/${venue.id}`;
+    return `https://www.sofascore.com/pt/venue/${venue.countrySlug}/${venue.venueSlug}/${venue.id}`;
   }
 
   private getApiUrls(
@@ -47,6 +47,7 @@ export class Venues {
     const venues: Venue[] = [];
 
     for (const essential of venueUrlEssentials) {
+      if (!essential.id) continue;
       const rewrite = this.storage.getRewrite();
       const exists = await this.storage.exists("venues", essential.id);
 
