@@ -169,10 +169,6 @@ export class Leagues {
         }
       }
 
-      if (!standings) {
-        throw new Error(`standings não encontrado para ${essential.leagueSlug}.`);
-      }
-
       if (!uniqueTournament) {
         throw new Error(`uniqueTournament não encontrado para ${essential.leagueSlug}.`);
       }
@@ -188,6 +184,12 @@ export class Leagues {
       const imageUrl = `https://img.sofascore.com/api/v1/unique-tournament/${essential.id}/image`;
       const imagePath = path.resolve(process.cwd(), "assets", "leagues", `${essential.id}.png`,);
       await downloadImage(imageUrl, imagePath);
+
+      const teams = [...new Map((standings?.standings ?? [])
+        .flatMap((standing) => standing.rows)
+        .map((row) => [row.team.id, { id: row.team.id, slug: row.team.slug, },
+        ]),
+      ).values(),]
 
       const tournament: League = {
         id: uniqueTournament.uniqueTournament.id,
@@ -227,10 +229,7 @@ export class Leagues {
 
         winners: winners?.winners ?? [],
 
-        teams: standings?.standings[0]?.rows.map((row) => ({
-          id: row.team.id,
-          slug: row.team.slug,
-        })) ?? [],
+        teams,
       };
 
       leagues.push(tournament);
